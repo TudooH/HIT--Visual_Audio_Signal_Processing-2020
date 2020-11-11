@@ -22,12 +22,12 @@ def homomorphic_filter(src, d0=30, r1=0.8, rh=1.25, c=5):
     return dst
 
 
-img = cv2.imread('../img/lena.tiff')
-# img_ = homomorphic_filter(img)
-img_ = np.zeros(img.shape, dtype=np.uint8)
-for i in range(3):
-    img_[:, :, i] = homomorphic_filter(img[:, :, i])
+if __name__ == '__main__':
+    img = cv2.imread('../img/lena.tiff')
+    img_ = np.zeros(img.shape, dtype=np.uint8)
+    for i in range(3):
+        img_[:, :, i] = homomorphic_filter(img[:, :, i])
 
-cv2.imshow('origin', img)
-cv2.imshow('img', img_)
-cv2.waitKey(0)
+    cv2.imshow('origin', img)
+    cv2.imshow('img', img_)
+    cv2.waitKey(0)

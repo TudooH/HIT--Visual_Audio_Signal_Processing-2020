@@ -54,20 +54,21 @@ def dft_map(shift):
     return mapping
 
 
-image = cv2.imread("../img/homomorphic/test.jpg")
-dft_img = dft(image)
-i_dft_img = i_dft(dft_img)
+if __name__ == '__main__':
+    image = cv2.imread("../img/homomorphic/test.jpg")
+    dft_img = dft(image)
+    i_dft_img = i_dft(dft_img)
 
-map_img0 = dft_map(dft_shift(dft_img[:, :, 0]))
-map_img1 = dft_map(dft_shift(dft_img[:, :, 1]))
-map_img2 = dft_map(dft_shift(dft_img[:, :, 2]))
+    map_img0 = dft_map(dft_shift(dft_img[:, :, 0]))
+    map_img1 = dft_map(dft_shift(dft_img[:, :, 1]))
+    map_img2 = dft_map(dft_shift(dft_img[:, :, 2]))
 
-plt.subplot(131), plt.imshow(map_img0, cmap='gray'), plt.title('channel0')
-plt.subplot(132), plt.imshow(map_img1, cmap='gray'), plt.title('channel1')
-plt.subplot(133), plt.imshow(map_img2, cmap='gray'), plt.title('channel2')
-plt.savefig('../img/homomorphic/dft_map.png')
-plt.show()
+    plt.subplot(131), plt.imshow(map_img0, cmap='gray'), plt.title('channel0')
+    plt.subplot(132), plt.imshow(map_img1, cmap='gray'), plt.title('channel1')
+    plt.subplot(133), plt.imshow(map_img2, cmap='gray'), plt.title('channel2')
+    plt.savefig('../img/homomorphic/dft_map.png')
+    plt.show()
 
-cv2.imshow('result', i_dft_img)
-cv2.imwrite('../img/homomorphic/result.png', i_dft_img)
-cv2.waitKey(0)
+    cv2.imshow('result', i_dft_img)
+    cv2.imwrite('../img/homomorphic/result.png', i_dft_img)
+    cv2.waitKey(0)
