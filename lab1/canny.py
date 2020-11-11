@@ -74,7 +74,7 @@ def gradient(img):
                 out[i, j] = 0
             elif nms[i, j] > high:
                 out[i, j] = 255
-            elif ((nms[i-1, j-1:j+1] < high).any() or (nms[i+1, j-1:j+1]).any()
+            elif ((nms[i-1, j-1: j+1] < high).any() or (nms[i+1, j-1: j+1] < high).any()
                   or (nms[i, [j-1, j+1]] < high).any()):
                 out[i, j] = 255
     return out

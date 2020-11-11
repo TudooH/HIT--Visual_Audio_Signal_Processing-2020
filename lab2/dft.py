@@ -29,7 +29,8 @@ def i_dft(img_complex):
     for c in range(c):
         for v in range(h):
             for u in range(w):
-                out[v, u, c] = np.abs(np.sum(img_complex[:, :, c] * np.exp(2j * np.pi * (x * u / w + y * v / h)))) / np.sqrt(w * h)
+                out[v, u, c] = np.abs(np.sum(img_complex[:, :, c]
+                                             * np.exp(2j * np.pi * (x * u / w + y * v / h)))) / np.sqrt(h * w)
 
     out = np.clip(out, 0, 255)
     out = out.astype(np.uint8)
