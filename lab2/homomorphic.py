@@ -2,32 +2,32 @@ import cv2
 import numpy as np
 
 
-def homomorphic_filter(src, d0=30, r1=0.8, rh=1.25, c=5):
-    gray = src.copy()
+def homomorphic_filter(gray, d0=30, r1=0.75, rh=1.75, c=5):
     gray = np.float64(gray)
     rows, cols = gray.shape
 
     gray = np.log(gray + 1)
     gray_fft = np.fft.fft2(gray)
-    gray_fft_shift = np.fft.fftshift(gray_fft)
-    M, N = np.meshgrid(np.arange(-cols // 2, cols // 2), np.arange(-rows // 2, rows // 2))
-    D = np.sqrt(M ** 2 + N ** 2)
-    Z = (rh - r1) * (1 - np.exp(-c * (D ** 2 / d0 ** 2))) + r1
-    dst_fft_shift = Z * gray_fft_shift
-    dst_shift = np.fft.ifftshift(dst_fft_shift)
-    dst = np.fft.ifft2(dst_shift)
-    dst = np.real(dst)
-    dst = np.exp(dst) - 1
-    dst = np.uint8(np.clip(dst, 0, 255))
-    return dst
+
+    for i in range(rows):
+        for j in range(cols):
+            tmp = (i - rows // 2) ** 2 + (j - cols // 2) ** 2
+            gray_fft[i][j] = ((rh - r1) * (1 - np.exp(-c * (tmp ** 2 / d0 ** 2))) + r1) * gray_fft[i][j]
+
+    out = np.fft.ifft2(gray_fft)
+    out = np.real(out)
+    out = np.exp(out) - 1
+    out = np.uint8(np.clip(out, 0, 255))
+    return out
 
 
 if __name__ == '__main__':
-    img = cv2.imread('../img/lena.tiff')
+    img = cv2.imread('../img/homomorphic/test.png')
     img_ = np.zeros(img.shape, dtype=np.uint8)
-    for i in range(3):
-        img_[:, :, i] = homomorphic_filter(img[:, :, i])
+    for cc in range(3):
+        img_[:, :, cc] = homomorphic_filter(img[:, :, cc])
 
     cv2.imshow('origin', img)
     cv2.imshow('img', img_)
+    cv2.imwrite('../img/homomorphic/homomorphic.png', img_)
     cv2.waitKey(0)
