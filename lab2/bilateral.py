@@ -21,7 +21,7 @@ def bilateral_filter(channel, size, sigma_d, sigma_r):
 
 
 if __name__ == '__main__':
-    img = cv2.imread('img/lena.tiff')
+    img = cv2.imread('../img/lena.tiff')
     channels = cv2.split(img)
 
     Size = 5
@@ -31,7 +31,7 @@ if __name__ == '__main__':
         img_[:, :, c] = bilateral_filter(channels[c], Size, 5, 30)
         print('finished')
 
-    cv2.imwrite('img/bilateral/bilateral.png', img_)
+    cv2.imwrite('../img/bilateral/bilateral.png', img_)
     cv2.imshow('origin', img)
     cv2.imshow('img', img_)
     cv2.waitKey(0)

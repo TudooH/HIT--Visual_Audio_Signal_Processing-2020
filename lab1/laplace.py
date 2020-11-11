@@ -19,11 +19,11 @@ def laplace(img):
 
 
 if __name__ == '__main__':
-    image = cv2.imread('img/lena.tiff', 0)
+    image = cv2.imread('../img/lena.tiff', 0)
 
     my_laplace = laplace(image)
     plt.subplot(121), plt.imshow(image, cmap='gray'), plt.title('origin')
     plt.subplot(122), plt.imshow(my_laplace, cmap='gray'), plt.title('laplace')
     plt.show()
 
-    cv2.imwrite('img/laplace/my_laplace.png', my_laplace)
+    cv2.imwrite('../img/laplace/my_laplace.png', my_laplace)

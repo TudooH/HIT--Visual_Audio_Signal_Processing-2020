@@ -54,7 +54,7 @@ def dft_map(shift):
     return mapping
 
 
-image = cv2.imread("img/homomorphic/test.jpg")
+image = cv2.imread("../img/homomorphic/test.jpg")
 dft_img = dft(image)
 i_dft_img = i_dft(dft_img)
 
@@ -65,9 +65,9 @@ map_img2 = dft_map(dft_shift(dft_img[:, :, 2]))
 plt.subplot(131), plt.imshow(map_img0, cmap='gray'), plt.title('channel0')
 plt.subplot(132), plt.imshow(map_img1, cmap='gray'), plt.title('channel1')
 plt.subplot(133), plt.imshow(map_img2, cmap='gray'), plt.title('channel2')
-plt.savefig('img/homomorphic/dft_map.png')
+plt.savefig('../img/homomorphic/dft_map.png')
 plt.show()
 
 cv2.imshow('result', i_dft_img)
-cv2.imwrite('img/homomorphic/result.png', i_dft_img)
+cv2.imwrite('../img/homomorphic/result.png', i_dft_img)
 cv2.waitKey(0)

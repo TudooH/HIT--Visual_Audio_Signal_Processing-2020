@@ -52,8 +52,8 @@ def equalize(channel, standard=None):
 
 
 if __name__ == '__main__':
-    img = cv2.imread('img/lena.tiff')
-    standard_img = cv2.imread('img/equalization/standard2.jpg')
+    img = cv2.imread('../img/lena.tiff')
+    standard_img = cv2.imread('../img/equalization/standard2.jpg')
 
     color = ('b', 'g', 'r')
 
@@ -79,7 +79,7 @@ if __name__ == '__main__':
         hist_ = histogram(channels_[k])
         plt.subplot(4, 3, k + 10), plt.plot(hist_, color=col), plt.title('equalized_{}'.format(col)), plt.xlim([0, 256])
     img_standard_equal = channels_.transpose((1, 2, 0))
-    plt.savefig('img/equalization/equalization.png')
+    plt.savefig('../img/equalization/equalization.png')
     plt.show()
 
     img_yuv = cv2.cvtColor(img, cv2.COLOR_BGR2YUV)
@@ -91,10 +91,10 @@ if __name__ == '__main__':
     img_yuv[:, :, 0] = equalize(channels[0], channels_standard[0])
     img_yuv_standard = cv2.cvtColor(img_yuv, cv2.COLOR_YUV2BGR)
 
-    cv2.imwrite('img/equalization/gbr_equalization.png', img_gbr_equal)
-    cv2.imwrite('img/equalization/yuv_equalization.png', img_yuv_equal)
-    cv2.imwrite('img/equalization/gbr_standard.png', img_standard_equal)
-    cv2.imwrite('img/equalization/yuv_standard.png', img_yuv_standard)
+    cv2.imwrite('../img/equalization/gbr_equalization.png', img_gbr_equal)
+    cv2.imwrite('../img/equalization/yuv_equalization.png', img_yuv_equal)
+    cv2.imwrite('../img/equalization/gbr_standard.png', img_standard_equal)
+    cv2.imwrite('../img/equalization/yuv_standard.png', img_yuv_standard)
 
     cv2.imshow('gbr', img_gbr_equal)
     cv2.imshow('gbr_standard', img_standard_equal)

@@ -21,7 +21,7 @@ def sobel(img):
 
 
 if __name__ == '__main__':
-    image = cv2.imread('img/lena.tiff', 0)
+    image = cv2.imread('../img/lena.tiff', 0)
 
     my_sobel, my_sobel_x, my_sobel_y = sobel(image)
     plt.subplot(231), plt.imshow(my_sobel, cmap='gray'), plt.title('my_sobel')
@@ -36,12 +36,12 @@ if __name__ == '__main__':
     plt.subplot(234), plt.imshow(cv2_sobel, cmap='gray'), plt.title('cv2_sobel')
     plt.subplot(235), plt.imshow(cv2_sobel_x, cmap='gray'), plt.title('x')
     plt.subplot(236), plt.imshow(cv2_sobel_y, cmap='gray'), plt.title('y')
-
+    plt.savefig('../img/sobel/sobel.png')
     plt.show()
 
-    cv2.imwrite('img/sobel/my_sobel.png', my_sobel)
-    cv2.imwrite('img/sobel/my_sobel_x.png', my_sobel_x)
-    cv2.imwrite('img/sobel/my_sobel_y.png', my_sobel_y)
-    cv2.imwrite('img/sobel/cv2_sobel.png', cv2_sobel)
-    cv2.imwrite('img/sobel/cv2_sobel_x.png', cv2_sobel_x)
-    cv2.imwrite('img/sobel/cv2_sobel_y.png', cv2_sobel_y)
+    cv2.imwrite('../img/sobel/my_sobel.png', my_sobel)
+    cv2.imwrite('../img/sobel/my_sobel_x.png', my_sobel_x)
+    cv2.imwrite('../img/sobel/my_sobel_y.png', my_sobel_y)
+    cv2.imwrite('../img/sobel/cv2_sobel.png', cv2_sobel)
+    cv2.imwrite('../img/sobel/cv2_sobel_x.png', cv2_sobel_x)
+    cv2.imwrite('../img/sobel/cv2_sobel_y.png', cv2_sobel_y)

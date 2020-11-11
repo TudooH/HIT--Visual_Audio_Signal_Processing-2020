@@ -86,12 +86,13 @@ def canny(img):
 
 
 if __name__ == '__main__':
-    gray = cv2.imread('img/lena.tiff', 0)
+    gray = cv2.imread('../img/lena.tiff', 0)
     my_canny = canny(gray)
     cv2_canny = cv2.Canny(gray, 80, 150)
-    cv2.imwrite('img/canny/my_canny.png', my_canny)
-    cv2.imwrite('img/canny/cv2_canny.png', cv2_canny)
+    cv2.imwrite('../img/canny/my_canny.png', my_canny)
+    cv2.imwrite('../img/canny/cv2_canny.png', cv2_canny)
     plt.subplot(131), plt.imshow(gray, cmap='gray'), plt.title('gray')
     plt.subplot(132), plt.imshow(my_canny, cmap='gray'), plt.title('my_canny')
     plt.subplot(133), plt.imshow(cv2_canny, cmap='gray'), plt.title('cv2_canny')
+    plt.savefig('../img/canny/canny.png')
     plt.show()

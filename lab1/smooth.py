@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 from matplotlib import pyplot as plt
 
-from transform import transform
+from util.transform import transform
 
 
 def smooth(img, pattern, r):
@@ -24,17 +24,17 @@ def smooth(img, pattern, r):
 
 
 if __name__ == '__main__':
-    gauss_noise = cv2.imread('img/noise/gauss_noise.png')
+    gauss_noise = cv2.imread('../img/noise/gauss_noise.png')
     gauss_mean_smooth = smooth(gauss_noise, 'mean', 3)
     gauss_median_smooth = smooth(gauss_noise, 'median', 3)
-    sp_noise = cv2.imread('img/noise/sp_noise.png')
+    sp_noise = cv2.imread('../img/noise/sp_noise.png')
     sp_mean_smooth = smooth(sp_noise, 'mean', 3)
     sp_median_smooth = smooth(sp_noise, 'median', 3)
 
-    cv2.imwrite('img/smooth/gauss_mean_smooth.png', gauss_mean_smooth)
-    cv2.imwrite('img/smooth/gauss_median_smooth.png', gauss_median_smooth)
-    cv2.imwrite('img/smooth/sp_mean_smooth.png', sp_mean_smooth)
-    cv2.imwrite('img/smooth/sp_median_smooth.png', sp_median_smooth)
+    cv2.imwrite('../img/smooth/gauss_mean_smooth.png', gauss_mean_smooth)
+    cv2.imwrite('../img/smooth/gauss_median_smooth.png', gauss_median_smooth)
+    cv2.imwrite('../img/smooth/sp_mean_smooth.png', sp_mean_smooth)
+    cv2.imwrite('../img/smooth/sp_median_smooth.png', sp_median_smooth)
 
     plt.subplot(231), plt.imshow(transform(gauss_noise)), plt.title('gauss_noise')
     plt.subplot(232), plt.imshow(transform(gauss_mean_smooth)), plt.title('gauss_mean_smooth')
@@ -42,4 +42,5 @@ if __name__ == '__main__':
     plt.subplot(234), plt.imshow(transform(sp_noise)), plt.title('sp_noise')
     plt.subplot(235), plt.imshow(transform(sp_mean_smooth)), plt.title('sp_mean_smooth')
     plt.subplot(236), plt.imshow(transform(sp_median_smooth)), plt.title('sp_median_smooth')
+    plt.savefig('../img/smooth/smooth.png')
     plt.show()
