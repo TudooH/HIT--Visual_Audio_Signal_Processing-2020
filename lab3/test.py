@@ -1,59 +1,50 @@
-import cv2
-import imutils
-import numpy as np
-import pytesseract
+import os
 
-pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files (x86)\Tesseract-OCR\tesseract.exe'
+from lab3.detection import detection
 
-img = cv2.imread('../img/test.jpeg', cv2.IMREAD_COLOR)
-# img = cv2.imread('../img/test_car.jpg', cv2.IMREAD_COLOR)
-img = cv2.resize(img, (600, 400))
 
-gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-gray = cv2.bilateralFilter(gray, 13, 15, 15)
+def iou(a, b):
+    x = min(a[2], b[2]) - max(a[0], b[0])
+    y = min(a[3], b[3]) - max(a[1], b[1])
+    if x <= 0 or y <= 0:
+        return 0
 
-edged = cv2.Canny(gray, 30, 200)
-contours = cv2.findContours(edged.copy(), cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-contours = imutils.grab_contours(contours)
-contours = sorted(contours, key=cv2.contourArea, reverse=True)[:10]
-screenCnt = None
+    area = x * y
+    area_a = (a[3] - a[1]) * (a[2] - a[0])
+    area_b = (b[3] - b[1]) * (b[2] - b[0])
+    return area / (area_a + area_b - area)
 
-for c in contours:
-    peri = cv2.arcLength(c, True)
-    approx = cv2.approxPolyDP(c, 0.018 * peri, True)
 
-    if len(approx) == 4:
-        screenCnt = approx
-        break
+# a = [1, 1, 4, 5]
+# b1 = [1, 1, 4, 5]
+# b2 = [5, 1, 4, 5]
+# b3 = [3, 2, 4, 6]
+# print("iou ", iou(a, b1))
+# print("iou ", iou(a, b2))
+# print("iou ", iou(a, b3))
+points = []
+for line in open('../data/points.txt', 'r'):
+    lines = line.split(' ')
+    points.append([float(lines[0]), float(lines[1]), float(lines[2]), float(lines[3][: -1])])
 
-if screenCnt is None:
-    detected = 0
-    print("No contour detected")
-else:
-    detected = 1
+tot = 0
+test = []
+for root, dirs, files in os.walk('../data'):
+    for file in files:
+        if file.endswith('.jpeg'):
+            x1, y1, x2, y2 = detection(os.path.join(root, file))
+            if x1 == 0 and y1 == 0 and x2 == 0 and y2 == 0:
+                tot += 1
+            test.append([x1, y1, x2, y2])
+print(tot)
 
-if detected == 1:
-    cv2.drawContours(img, [screenCnt], -1, (0, 0, 255), 3)
+ac = 0
+with open('result.txt', 'w') as f:
+    for i in range(len(points)):
+        rate = iou(points[i], test[i])
+        f.write('{} {} {}\n'.format(i, rate, test[i]))
+        if rate > 0.3:
+            ac += 1
 
-mask = np.zeros(gray.shape, np.uint8)
-cv2.drawContours(mask, [screenCnt], 0, 255, -1)
-new_image = cv2.bitwise_and(img, img, mask=mask)
-
-(x, y) = np.where(mask == 255)
-(topx, topy) = (np.min(x), np.min(y))
-(bottomx, bottomy) = (np.max(x), np.max(y))
-Cropped = gray[topx:bottomx + 1, topy:bottomy + 1]
-# kernel = np.ones((5, 5), dtype=np.uint8)
-# Cropped = cv2.erode(Cropped, kernel, iterations=1)
-# _, Cropped = cv2.threshold(Cropped, 100, 255, cv2.THRESH_BINARY)
-
-text = pytesseract.image_to_string(Cropped, config='--psm 11')
-print("programming_fever's License Plate Recognition\n")
-print("Detected license plate Number is:", text)
-img = cv2.resize(img, (500, 300))
-Cropped = cv2.resize(Cropped, (400, 200))
-cv2.imshow('car', img)
-cv2.imshow('Cropped', Cropped)
-
-cv2.waitKey(0)
-cv2.destroyAllWindows()
+print(ac)
+print(ac / len(points))
