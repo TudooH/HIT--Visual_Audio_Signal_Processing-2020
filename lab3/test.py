@@ -15,13 +15,6 @@ def iou(a, b):
     return area / (area_a + area_b - area)
 
 
-# a = [1, 1, 4, 5]
-# b1 = [1, 1, 4, 5]
-# b2 = [5, 1, 4, 5]
-# b3 = [3, 2, 4, 6]
-# print("iou ", iou(a, b1))
-# print("iou ", iou(a, b2))
-# print("iou ", iou(a, b3))
 points = []
 for line in open('../data/points.txt', 'r'):
     lines = line.split(' ')
@@ -32,11 +25,10 @@ test = []
 for root, dirs, files in os.walk('../data'):
     for file in files:
         if file.endswith('.jpeg'):
-            x1, y1, x2, y2 = detection(os.path.join(root, file))
+            x1, y1, x2, y2, _, _ = detection(os.path.join(root, file))
             if x1 == 0 and y1 == 0 and x2 == 0 and y2 == 0:
                 tot += 1
             test.append([x1, y1, x2, y2])
-print(tot)
 
 ac = 0
 with open('result.txt', 'w') as f:

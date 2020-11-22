@@ -53,7 +53,8 @@ def equalize(channel, standard=None):
 
 if __name__ == '__main__':
     img = cv2.imread('../img/lena.tiff')
-    standard_img = cv2.imread('../img/equalization/standard2.jpg')
+    standard_img1 = cv2.imread('../img/equalization/standard1.jpg')
+    standard_img2 = cv2.imread('../img/equalization/standard2.jpg')
 
     color = ('b', 'g', 'r')
 
@@ -69,7 +70,7 @@ if __name__ == '__main__':
     img_gbr_equal = channels_.transpose((1, 2, 0))
 
     channels_ = np.zeros((3, 512, 512), dtype=np.uint8)
-    channels_standard = cv2.split(standard_img)
+    channels_standard = cv2.split(standard_img2)
     for k, col in enumerate(color):
         hist_r = histogram(channels_standard[k])
         plt.subplot(4, 3, k + 7), plt.plot(hist_r, color=col), plt.title('standard_{}'.format(col)), plt.xlim([0, 256])
@@ -83,21 +84,27 @@ if __name__ == '__main__':
     plt.show()
 
     img_yuv = cv2.cvtColor(img, cv2.COLOR_BGR2YUV)
-    standard_yuv = cv2.cvtColor(standard_img, cv2.COLOR_BGR2YUV)
+    standard_yuv = cv2.cvtColor(standard_img2, cv2.COLOR_BGR2YUV)
     channels = cv2.split(img)
     channels_standard = cv2.split(standard_yuv)
     img_yuv[:, :, 0] = equalize(channels[0])
     img_yuv_equal = cv2.cvtColor(img_yuv, cv2.COLOR_YUV2BGR)
     img_yuv[:, :, 0] = equalize(channels[0], channels_standard[0])
-    img_yuv_standard = cv2.cvtColor(img_yuv, cv2.COLOR_YUV2BGR)
+    img_yuv_standard1 = cv2.cvtColor(img_yuv, cv2.COLOR_YUV2BGR)
+
+    standard_yuv = cv2.cvtColor(standard_img1, cv2.COLOR_BGR2YUV)
+    channels_standard = cv2.split(standard_yuv)
+    img_yuv[:, :, 0] = equalize(channels[0], channels_standard[0])
+    img_yuv_standard2 = cv2.cvtColor(img_yuv, cv2.COLOR_YUV2BGR)
 
     cv2.imwrite('../img/equalization/gbr_equalization.png', img_gbr_equal)
     cv2.imwrite('../img/equalization/yuv_equalization.png', img_yuv_equal)
     cv2.imwrite('../img/equalization/gbr_standard.png', img_standard_equal)
-    cv2.imwrite('../img/equalization/yuv_standard.png', img_yuv_standard)
+    cv2.imwrite('../img/equalization/yuv_standard1.png', img_yuv_standard1)
+    cv2.imwrite('../img/equalization/yuv_standard2.png', img_yuv_standard2)
 
     cv2.imshow('gbr', img_gbr_equal)
     cv2.imshow('gbr_standard', img_standard_equal)
     cv2.imshow('yuv', img_yuv_equal)
-    cv2.imshow('yuv_standard', img_yuv_standard)
+    cv2.imshow('yuv_standard', img_yuv_standard1)
     cv2.waitKey(0)
