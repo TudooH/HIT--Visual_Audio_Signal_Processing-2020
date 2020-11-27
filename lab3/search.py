@@ -1,4 +1,3 @@
-from functools import cmp_to_key
 import cv2
 import imutils
 import numpy as np
@@ -28,8 +27,6 @@ def image2txt(cropped):
 
 def search(filename):
     img = cv2.imread(filename, cv2.IMREAD_COLOR)
-    # if img.shape[1] > 800:
-    #     img = cv2.resize(img, (int(img.shape[1] * 800 / img.shape[0]), 800))
 
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     gray = cv2.bilateralFilter(gray, 13, 15, 15)
@@ -40,7 +37,6 @@ def search(filename):
     ex = cv2.morphologyEx(ex, cv2.MORPH_CLOSE, kernel, iterations=4)
 
     edged = cv2.Canny(ex, 30, 180)
-
     contours = cv2.findContours(edged.copy(), cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     contours = imutils.grab_contours(contours)
     contours = sorted(contours, key=cv2.contourArea, reverse=True)[:15]
@@ -59,16 +55,3 @@ def search(filename):
     if img.shape[1] > 800:
         img = cv2.resize(img, (int(img.shape[1] * 800 / img.shape[0]), 800))
     return top_y / img.shape[1], top_x / img.shape[0], bottom_y / img.shape[1], bottom_x / img.shape[0], img, cropped
-
-
-if __name__ == '__main__':
-    _, _, _, _, image, area = search('../img/0.jpg')
-    txt = image2txt(area)
-    print('txt: {}'.format(txt))
-    cv2.imshow('image', image)
-    cv2.imshow('area', area)
-    cv2.imwrite('area.jpg', area)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
-
-# 34, 89

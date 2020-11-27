@@ -15,4 +15,4 @@ def processing(filename):
 
 
 if __name__ == '__main__':
-    processing('../img/cars/1.jpg')
+    processing('../img/cars/0.jpg')
