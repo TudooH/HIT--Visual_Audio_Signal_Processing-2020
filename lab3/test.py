@@ -1,6 +1,6 @@
 import os
 
-from lab3.detection import detection
+from lab3.search import search
 
 
 def iou(a, b):
@@ -25,7 +25,7 @@ test = []
 for root, dirs, files in os.walk('../data'):
     for file in files:
         if file.endswith('.jpeg'):
-            x1, y1, x2, y2, _, _ = detection(os.path.join(root, file))
+            x1, y1, x2, y2, _, _ = search(os.path.join(root, file))
             if x1 == 0 and y1 == 0 and x2 == 0 and y2 == 0:
                 tot += 1
             test.append([x1, y1, x2, y2])
@@ -35,7 +35,7 @@ with open('result.txt', 'w') as f:
     for i in range(len(points)):
         rate = iou(points[i], test[i])
         f.write('{} {} {}\n'.format(i, rate, test[i]))
-        if rate > 0.3:
+        if rate > 0.1:
             ac += 1
 
 print(ac)
