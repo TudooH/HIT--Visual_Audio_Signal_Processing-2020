@@ -66,16 +66,16 @@ def gradient(img):
                     nms[i, j] = 0
 
     out = np.zeros([w, h])
-    low = 0.13 * np.max(nms)
-    high = 0.25 * np.max(nms)
+    low = 0.08 * np.max(nms)
+    high = 0.16 * np.max(nms)
     for i in range(1, w-1):
         for j in range(1, h-1):
             if nms[i, j] < low:
                 out[i, j] = 0
             elif nms[i, j] > high:
                 out[i, j] = 255
-            elif ((nms[i-1, j-1: j+1] < high).any() or (nms[i+1, j-1: j+1] < high).any()
-                  or (nms[i, [j-1, j+1]] < high).any()):
+            elif ((nms[i-1, j-1: j+1] > high).any() or (nms[i+1, j-1: j+1] > high).any()
+                  or (nms[i, [j-1, j+1]] > high).any()):
                 out[i, j] = 255
     return out
 
