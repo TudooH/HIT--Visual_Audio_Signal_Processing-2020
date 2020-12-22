@@ -10,7 +10,7 @@ def sgn(x):
 class Wav:
     def __init__(self, filename):
         self._filename = filename
-        _, sig = wavfile.read('data/{}.wav'.format(filename))
+        _, sig = wavfile.read('../wav_source/{}.wav'.format(filename))
         self._sig = np.array(sig, dtype=np.int64)
         self._num = int(len(self._sig) / 256)
         if len(self._sig) % 256 != 0:

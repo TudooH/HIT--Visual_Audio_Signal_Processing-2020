@@ -4,8 +4,8 @@ from torch.utils.data import Dataset
 
 
 def make_label(root_name):
-    with open('../data/{}_label.txt'.format(root_name), 'w') as f:
-        for root, dirs, files in os.walk('../data/' + root_name):
+    with open('../wav_source/{}_label.txt'.format(root_name), 'w') as f:
+        for root, dirs, files in os.walk('../wav_source/' + root_name):
             for file in files:
                 if file[-3:] != 'bmp':
                     continue
