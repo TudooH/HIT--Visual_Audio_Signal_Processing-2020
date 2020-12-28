@@ -1,5 +1,4 @@
 import numpy as np
-import wave
 
 from lab5.dpcm import Compress, Decompress
 
@@ -29,13 +28,11 @@ class Compress1(Compress):
             for x in dif:
                 f.write(x)
 
-        # return self._sig[0], dif
-
 
 class Decompress1(Decompress):
     def __init__(self, filename, base):
         self._base = base
-        super(Decompress1, self).__init__(filename, 1)
+        super(Decompress1, self).__init__(filename, 2)
 
     def decompress(self):
         sig = [self._head]
@@ -43,17 +40,3 @@ class Decompress1(Decompress):
             sig.append(min(32767, max(sig[-1] + x * self._base, -32768)))
 
         return np.array(sig, dtype=np.int16)
-
-    def write_file(self, filename):
-        with wave.open('decompressed1/{}.pcm'.format(filename), 'wb') as f:
-            f.setnchannels(1)
-            f.setsampwidth(2)
-            f.setframerate(16000)
-            f.writeframes(self._sig)
-
-
-for i in range(10):
-    co = Compress1(str(i+1), 100)
-    co.compress()
-    de = Decompress1('compressed1/{}.dpc'.format(str(i+1)), 100)
-    de.write_file(str(i+1))

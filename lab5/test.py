@@ -1,9 +1,13 @@
-import numpy as np
+from lab5.dpcm1 import Compress1, Decompress1
+from lab5.dpcm2 import Compress2, Decompress2
 
 
-with open('compressed1/1.dpc', 'rb') as f:
-    m = f.read()
-    print(m[0], m[0] << 8)
-    print(m[1])
-    print(np.int16((m[0] << 8) + m[1]))
+for i in range(10):
+    co = Compress1(str(i+1), 100)
+    co.compress()
+    de = Decompress1('compressed1/{}'.format(str(i+1)), 100)
 
+for i in range(10):
+    co = Compress2(str(i+1))
+    co.compress()
+    de = Decompress2('compressed2/{}'.format(str(i+1)))
