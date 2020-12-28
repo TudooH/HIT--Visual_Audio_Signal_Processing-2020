@@ -24,7 +24,8 @@ class Compress1(Compress):
         dif = np.array(dif, dtype=np.int8)
 
         with open('compressed1/{}.dpc'.format(self._filename), 'wb') as f:
-            f.write(self._sig[0])
+            f.write(np.uint8(self._sig[0] >> 8))
+            f.write(np.uint8(self._sig[0] & 0x00ff))
             for x in dif:
                 f.write(x)
 

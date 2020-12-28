@@ -3,20 +3,24 @@ import numpy as np
 from lab5.dpcm import Compress, Decompress
 
 
+mapping1_dict = {0: 0, 1: 1, 2: 1, 3: 2, 4: 2, 5: 3, 6: 3, 7: 4, 8: 5, 9: 6, 10: 7, 11: 8}
+mapping2_dict = {0: 0, 1: 1.5, 2: 3.5, 3: 6.5, 4: 7, 5: 8, 6: 9, 7: 10, 8: 11}
+
+
 class Compress2(Compress):
     def __init__(self, filename):
         super(Compress2, self).__init__(filename)
 
     @staticmethod
     def mapping1(x):
-        c = min(8, round(np.log(abs(x) + 1)))
+        c = mapping1_dict[min(11, round(np.log(abs(x) + 1)))]
         return min(15, 8 + np.sign(x) * c)
 
     @staticmethod
     def mapping2(x):
         sig = 1 if x >= 8 else -1
         c = (x - 8) * sig
-        return (np.exp(c) - 1) * sig
+        return (np.exp(mapping2_dict[c]) - 1) * sig
 
     def compress(self):
         dif = []
@@ -29,7 +33,8 @@ class Compress2(Compress):
 
         dif = np.array(dif, dtype=np.uint8)
         with open('compressed2/{}.dpc'.format(self._filename), 'wb') as f:
-            f.write(self._sig[0])
+            f.write(np.uint8(self._sig[0] >> 8))
+            f.write(np.uint8(self._sig[0] & 0x00ff))
             for i in range(len(dif)):
                 if i % 2 == 0:
                     continue
@@ -44,7 +49,7 @@ class Decompress2(Decompress):
     def mapping(x):
         sig = 1 if x >= 8 else -1
         c = (x - 8) * sig
-        return (np.exp(c) - 1) * sig
+        return (np.exp(mapping2_dict[c]) - 1) * sig
 
     def decompress(self):
         sig = [self._head]
