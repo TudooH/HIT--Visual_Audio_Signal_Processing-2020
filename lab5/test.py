@@ -15,18 +15,18 @@ def cal_snr(ori, com):
 
 
 for i in range(10):
-    co = Compress1(str(i+1), 100)
+    co = Compress1(str(i+1))
     co.compress()
-    de = Decompress1('compressed1/{}'.format(str(i+1)), 100)
+    de = Decompress1('compressed1/{}_8bit'.format(str(i+1)))
 
 for i in range(10):
     co = Compress2(str(i+1))
     co.compress()
-    de = Decompress2('compressed2/{}'.format(str(i+1)))
+    de = Decompress2('compressed2/{}_4bit'.format(str(i+1)))
 
 with open('snr.txt', 'w') as f:
     for i in range(10):
         _, sig = wavfile.read('../wav_source/{}.wav'.format(str(i+1)))
-        _, compressed1 = wavfile.read('decompressed1/{}.pcm'.format(str(i+1)))
-        _, compressed2 = wavfile.read('decompressed2/{}.pcm'.format(str(i+1)))
+        _, compressed1 = wavfile.read('decompressed1/{}_8bit.pcm'.format(str(i+1)))
+        _, compressed2 = wavfile.read('decompressed2/{}_4bit.pcm'.format(str(i+1)))
         f.write('({}) 8-bit: {}, 4-bit: {}\n'.format(i+1, cal_snr(sig, compressed1), cal_snr(sig, compressed2)))

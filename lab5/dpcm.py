@@ -5,6 +5,11 @@ import wave
 
 
 class Compress(metaclass=ABCMeta):
+    """ superclass of compress
+
+    Args:
+        filename (str): seq of the file we need to compress
+    """
     def __init__(self, filename):
         self._filename = filename
         _, sig = wavfile.read('../wav_source/{}.wav'.format(filename))
@@ -12,10 +17,19 @@ class Compress(metaclass=ABCMeta):
 
     @abstractmethod
     def compress(self):
+        """ compress sig information in specific algorithm and write it into the disk
+
+        """
         pass
 
 
 class Decompress(metaclass=ABCMeta):
+    """ superclass of decompress, write the decompressed file into the disk directly
+
+    Args:
+        filename (str): name of the compressed file we need to decompress
+        byte (int): 2 -> 8bit, otherwise -> 4bit
+    """
     def __init__(self, filename, byte):
         with open(filename+'.dpc', 'rb') as f:
             file = f.read()
@@ -40,4 +54,8 @@ class Decompress(metaclass=ABCMeta):
 
     @abstractmethod
     def decompress(self):
+        """ decompress the compressed file information according to the specific algorithm
+
+        :return: decompressed signal information
+        """
         pass
