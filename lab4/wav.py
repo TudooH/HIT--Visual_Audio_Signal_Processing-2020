@@ -8,23 +8,37 @@ def sgn(x):
 
 
 class Wav:
+    """ vad algorithm
+
+    Args:
+        filename: seq of the wav file
+    """
     def __init__(self, filename):
         self._filename = filename
         _, sig = wavfile.read('../wav_source/{}.wav'.format(filename))
         self._sig = np.array(sig, dtype=np.int64)
         self._num = int(len(self._sig) / 256)
+        self._hamming = np.hamming(256)
         if len(self._sig) % 256 != 0:
             self._num += 1
 
     def get_energy(self):
+        """ get the energy of the wav file
+
+        :return: list of energy info
+        """
         energy = []
         for i in range(self._num - 1):
-            energy.append(sum(np.power(self._sig[i*256: (i+1)*256], 2)))
+            energy.append(sum(np.power(self._hamming * self._sig[i*256: (i+1)*256], 2)))
         energy.append(sum(np.power(self._sig[(self._num-1)*256:], 2)))
 
         return energy
 
     def get_zeros(self):
+        """ get the zero rate
+
+        :return: list of zero rate info
+        """
         zeros = []
         p, tmp = 0, 0
         for i, x in enumerate(self._sig):
@@ -37,12 +51,13 @@ class Wav:
         return zeros
 
     def detect(self):
+        """ de-noise with vad algorithm and write the de-noised file"""
         energy = self.get_energy()
         zeros = self.get_zeros()
 
         high = np.mean(energy) / 2
         low = high / 4
-        low_zeros = np.mean(zeros) * 1.5
+        low_zeros = np.mean(zeros) * 1.
 
         p = 0
         voiced = []
@@ -61,7 +76,7 @@ class Wav:
         for i, v in enumerate(voiced):
             p1 = 0 if i == 0 else voiced[i-1][1]
             p2 = v[0] - 1
-            while p2 >= p1 and zeros[p2] <= low_zeros:
+            while p2 >= p1 and zeros[p2] >= low_zeros:
                 p2 -= 1
             voiced[i][0] = p2 + 1
 
@@ -85,6 +100,7 @@ class Wav:
             f.writeframes(new_sig.tobytes())
 
 
+# write file at specific file path
 def write_file(filename, a):
     with open(filename, 'w') as f:
         for x in a:

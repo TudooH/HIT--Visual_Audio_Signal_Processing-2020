@@ -3,28 +3,47 @@ import numpy as np
 import wave
 
 
+# copy from lab4
 class Detection:
+    """ vad algorithm
+
+    Args:
+        filename: seq of the wav file
+    """
     def __init__(self, filename):
         self._filename = filename
         _, sig = wavfile.read('raw/{}.wav'.format(filename))
         self._sig = np.array(sig, dtype=np.int64)
         self._num = int(len(self._sig) / 256)
+        self._hamming = np.hamming(256)
         if len(self._sig) % 256 != 0:
             self._num += 1
 
     @staticmethod
     def sgn(x):
+        """ sign of x
+
+        :return: 1 if x >= 0, -1 otherwise
+        """
         return 1 if x >= 0 else -1
 
     def get_energy(self):
+        """ get the energy of the wav file
+
+        :return: list of energy info
+        """
         energy = []
         for i in range(self._num - 1):
-            energy.append(sum(np.power(self._sig[i*256: (i+1)*256], 2)))
+            energy.append(sum(np.power(self._hamming * self._sig[i*256: (i+1)*256], 2)))
         energy.append(sum(np.power(self._sig[(self._num-1)*256:], 2)))
 
         return energy
 
     def get_zeros(self):
+        """ get the zero rate
+
+        :return: list of zero rate info
+        """
         zeros = []
         p, tmp = 0, 0
         for i, x in enumerate(self._sig):
@@ -37,6 +56,7 @@ class Detection:
         return zeros
 
     def detect(self):
+        """ de-noise with vad algorithm and write the de-noised file"""
         energy = self.get_energy()
         zeros = self.get_zeros()
 
