@@ -57,7 +57,7 @@ class Wav:
 
         high = np.mean(energy) / 2
         low = high / 4
-        low_zeros = np.mean(zeros) * 1.
+        low_zeros = np.mean(zeros) * 1.5
 
         p = 0
         voiced = []
@@ -76,7 +76,7 @@ class Wav:
         for i, v in enumerate(voiced):
             p1 = 0 if i == 0 else voiced[i-1][1]
             p2 = v[0] - 1
-            while p2 >= p1 and zeros[p2] >= low_zeros:
+            while p2 >= p1 and zeros[p2] <= low_zeros:
                 p2 -= 1
             voiced[i][0] = p2 + 1
 
