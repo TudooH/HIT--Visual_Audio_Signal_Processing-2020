@@ -2,7 +2,7 @@ import cv2
 import torch
 from torchvision import transforms
 
-from train.train_net import Net
+from lab3.train.train_net import Net
 
 
 dictionary = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9',

@@ -3,21 +3,21 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
 from torchvision import transforms
-from train.make_data import MyDataset
+from lab3.train.make_data import MyDataset
 
 BATCH_SIZE = 128
 EPOCHS = 10
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print(DEVICE)
 
-train_dataset = MyDataset(names_file='../data/training-set_label.txt',
+train_dataset = MyDataset(names_file='../../data/training-set_label.txt',
                           transform=transforms.Compose([
                               transforms.ToTensor(),
                               transforms.Normalize((0.1307,), (0.3081,))
                           ]))
 train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=BATCH_SIZE, shuffle=True)
 
-test_dataset = MyDataset(names_file='../data/test-set_label.txt',
+test_dataset = MyDataset(names_file='../../data/test-set_label.txt',
                          transform=transforms.Compose([
                              transforms.ToTensor(),
                              transforms.Normalize((0.1307,), (0.3081,))
